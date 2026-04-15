@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Website Keren</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      background: #f5f7fa;
+      color: #333;
+    }
+
+    /* LOADER */
+    #loader {
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      background: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+    }
+
+    .spinner {
+      width: 50px;
+      height: 50px;
+      border: 5px solid #ddd;
+      border-top: 5px solid #4f46e5;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 50px;
+      background: white;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    }
+
+    header h1 {
+      color: #4f46e5;
+    }
+
+    nav a {
+      margin-left: 20px;
+      text-decoration: none;
+      color: #333;
+      font-weight: 500;
+    }
+
+    nav a:hover {
+      color: #4f46e5;
+    }
+
+    .hero {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 60px 50px;
+    }
+
+    .hero-text {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: 0.6s;
+    }
+
+    .hero-text h2 {
+      font-size: 40px;
+      margin-bottom: 20px;
+    }
+
+    .hero-text p {
+      margin-bottom: 20px;
+    }
+
+    .hero-text button {
+      padding: 10px 20px;
+      border: none;
+      background: #4f46e5;
+      color: white;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    .hero img {
+      width: 400px;
+      border-radius: 20px;
+      opacity: 0;
+      transform: translateY(30px);
+      transition: 0.6s;
+    }
+
+    .features {
+      display: flex;
+      justify-content: space-around;
+      padding: 50px;
+    }
+
+    .card {
+      /* CONTAINER UNTUK DAFTAR SISWA */
+.siswa-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 25px;
+  padding: 50px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+/* KOTAK PROFIL SISWA */
+.siswa-card {
+  background: white;
+  padding: 20px;
+  border-radius: 20px;
+  text-align: center;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+  transition: 0.3s;
+  border: 1px solid #eee;
+}
+
+.siswa-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 15px 30px rgba(79, 70, 229, 0.1);
+}
+
+/* GAYA FOTO AVATAR */
+.avatar-img {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%; /* Membuat gambar jadi bulat */
+  object-fit: cover;
+  margin-bottom: 15px;
+  border: 3px solid #4f46e5; /* Border warna indigo sesuai tema */
+  padding: 3px;
+}
+
+.siswa-card h4 {
+  color: #333;
+  font-size: 1.1rem;
+  margin-bottom: 5px;
+}
+
+.siswa-card p {
+  color: #666;
+  font-size: 0.85rem;
+}
+    }
+
+    .card:hover {
+      transform: translateY(-10px);
+    }
+
+    .show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      background: #4f46e5;
+      color: white;
+      margin-top: 50px;
+    }
+
+    @media(max-width: 768px) {
+      .hero {
+        flex-direction: column;
+        text-align: center;
+      }
+
+      .hero img {
+        margin-top: 20px;
+        width: 100%;
+      }
+
+      .features {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .card {
+        margin-bottom: 20px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<div id="loader">
+  <div class="spinner"></div>
+</div>
+
+<header>
+  <h1>Web Site Kelas 6</h1>
+  <nav>
+    <a href="index.html">Home</a>
+<a href="siswa.html">Siswa</a>
+<a href="materi.html">Materi</a>
+  </nav>
+</header>
+
+<section class="hero">
+  <div class="hero-text">
+    <h2>Web Site ini adalah web site berisi pembelajaran untuk kelas 6 </h2>
+    <p>Mari belajar bersama sama dengan kami</p>
+    <button>Mulai Sekarang</button>
+  </div>
+  <img src="https://picsum.photos/500/300" alt="hero">
+</section>
+
+<section class="features">
+  <div class="card">
+    <h3>Desain Clean</h3>
+    <p>Tampilan simpel dan enak dilihat.</p>
+  </div>
+  <div class="card">
+    <h3>Responsive</h3>
+    <p>Cocok di semua perangkat.</p>
+  </div>
+  <div class="card">
+    <h3>Modern</h3>
+    <p>Menggunakan gaya desain terbaru.</p>
+  </div>
+</section>
+
+<footer>
+  <p>© 2026 Web Site Kelas 6. All rights reserved.</p>
+</footer>
+
+<script>
+  // LOADING
+  window.addEventListener('load', () => {
+    document.getElementById('loader').style.display = 'none';
+  });
+
+  // SCROLL ANIMATION
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('show');
+      }
+    });
+  });
+
+  document.querySelectorAll('.hero-text, .hero img, .card').forEach(el => {
+    observer.observe(el);
+  });
+</script>
+
+</body>
+</html>

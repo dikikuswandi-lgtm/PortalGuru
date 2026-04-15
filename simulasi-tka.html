@@ -1,0 +1,412 @@
+<!doctype html>
+<html lang="id">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Simulasi TKA - Tes Kemampuan Akademik</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
+  <script src="/_sdk/data_sdk.js"></script>
+  <script src="/_sdk/element_sdk.js"></script>
+  <style>
+    * { box-sizing: border-box; }
+    html, body { height: 100%; margin: 0; padding: 0; }
+    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+    .app-wrapper { height: 100%; overflow-auto; }
+  </style>
+  <style>body { box-sizing: border-box; }</style>
+ </head>
+ <body>
+  <div class="app-wrapper bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen"><!-- Header -->
+   <header class="bg-white shadow-md sticky top-0 z-10">
+    <div class="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
+     <div class="flex items-center gap-3"><i data-lucide="book-open" class="w-8 h-8 text-blue-600"></i>
+      <h1 id="app-title" class="text-2xl font-bold text-gray-800">Simulasi TKA</h1>
+     </div>
+     <div id="header-status" class="text-sm text-gray-600"></div>
+    </div>
+   </header><!-- Main Content -->
+   <main class="max-w-6xl mx-auto px-4 py-8"><!-- Form Input & Start Screen -->
+    <div id="form-screen" class="bg-white rounded-lg shadow-lg p-8 mb-6">
+     <h2 class="text-2xl font-bold text-gray-800 mb-6">Identitas Peserta</h2>
+     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+      <div><label for="nama" class="block text-sm font-medium text-gray-700 mb-2">Nama Lengkap</label> <input type="text" id="nama" placeholder="Masukkan nama Anda" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+      </div>
+      <div><label for="sekolah" class="block text-sm font-medium text-gray-700 mb-2">Nama Sekolah</label> <input type="text" id="sekolah" placeholder="Masukkan nama sekolah" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+      </div>
+      <div><label for="kelas" class="block text-sm font-medium text-gray-700 mb-2">Kelas</label> <input type="text" id="kelas" placeholder="Contoh: X A" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+      </div>
+      <div><label for="absen" class="block text-sm font-medium text-gray-700 mb-2">Nomor Absen</label> <input type="number" id="absen" placeholder="Nomor absen" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+      </div>
+     </div>
+     <div id="welcome-text" class="bg-blue-50 border-l-4 border-blue-500 p-4 mb-6 rounded">
+      <p class="text-blue-900 font-medium">Uji kemampuan akademikmu!</p>
+      <p class="text-blue-700 text-sm mt-2">Total 30 soal • 120 menit • 3 kategori (Bilangan, Geometri, Data)</p>
+     </div><button id="start-btn" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-lg transition duration-200 flex items-center justify-center gap-2"> <i data-lucide="play" class="w-5 h-5"></i> Mulai Tes </button>
+    </div><!-- Test Screen -->
+    <div id="test-screen" class="hidden"><!-- Progress Bar -->
+     <div class="bg-white rounded-lg shadow-md p-4 mb-6">
+      <div class="flex justify-between items-center mb-2"><span id="progress-text" class="text-sm font-medium text-gray-700">Soal 1 dari 30</span> <span id="timer" class="text-sm font-medium text-red-600">⏱ 02:00:00</span>
+      </div>
+      <div class="w-full bg-gray-200 rounded-full h-2">
+       <div id="progress-bar" class="bg-blue-600 h-2 rounded-full transition-all duration-300" style="width: 0%"></div>
+      </div>
+     </div><!-- Question Card -->
+     <div class="bg-white rounded-lg shadow-lg p-8 mb-6">
+      <div class="flex items-center gap-3 mb-4"><span id="category-badge" class="px-3 py-1 bg-blue-100 text-blue-800 font-semibold text-sm rounded-full">Bilangan</span> <span id="difficulty-badge" class="px-3 py-1 bg-green-100 text-green-800 font-semibold text-sm rounded-full">Mudah</span>
+      </div>
+      <h3 id="question-text" class="text-lg font-semibold text-gray-800 mb-6">Soal pertama akan dimuat...</h3><!-- Options -->
+      <div id="options-container" class="space-y-3"></div>
+     </div><!-- Navigation Buttons -->
+     <div class="flex gap-4 mb-6"><button id="prev-btn" class="flex-1 bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-3 rounded-lg transition duration-200 flex items-center justify-center gap-2"> <i data-lucide="chevron-left" class="w-5 h-5"></i> Sebelumnya </button> <button id="next-btn" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-lg transition duration-200 flex items-center justify-center gap-2"> Selanjutnya <i data-lucide="chevron-right" class="w-5 h-5"></i> </button> <button id="finish-btn" class="flex-1 bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded-lg transition duration-200 flex items-center justify-center gap-2"> <i data-lucide="check" class="w-5 h-5"></i> Selesai </button>
+     </div>
+    </div><!-- Results Screen -->
+    <div id="results-screen" class="hidden">
+     <div class="bg-white rounded-lg shadow-lg p-8 text-center mb-6"><i data-lucide="award" class="w-16 h-16 text-yellow-500 mx-auto mb-4"></i>
+      <h2 class="text-3xl font-bold text-gray-800 mb-2">Tes Selesai!</h2>
+      <p id="results-name" class="text-lg text-gray-600 mb-6">Terima kasih telah mengikuti tes</p><!-- Score Summary -->
+      <div id="score-summary" class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+       <div class="bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg p-6 text-white">
+        <p class="text-sm font-medium opacity-90">Total Skor</p>
+        <p id="total-score" class="text-4xl font-bold">0</p>
+       </div>
+       <div class="bg-gradient-to-br from-purple-500 to-purple-600 rounded-lg p-6 text-white">
+        <p class="text-sm font-medium opacity-90">Bilangan</p>
+        <p id="bilangan-score" class="text-3xl font-bold">0%</p>
+       </div>
+       <div class="bg-gradient-to-br from-pink-500 to-pink-600 rounded-lg p-6 text-white">
+        <p class="text-sm font-medium opacity-90">Geometri</p>
+        <p id="geometri-score" class="text-3xl font-bold">0%</p>
+       </div>
+       <div class="bg-gradient-to-br from-green-500 to-green-600 rounded-lg p-6 text-white">
+        <p class="text-sm font-medium opacity-90">Data</p>
+        <p id="data-score" class="text-3xl font-bold">0%</p>
+       </div>
+      </div><button id="review-btn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg transition duration-200 mb-4 mr-2"> Lihat Detail Jawaban </button> <button id="restart-btn" class="bg-gray-600 hover:bg-gray-700 text-white font-bold py-3 px-6 rounded-lg transition duration-200"> Mulai Ulang </button>
+     </div>
+    </div><!-- All Results Table -->
+    <div id="all-results-screen" class="hidden">
+     <div class="bg-white rounded-lg shadow-lg p-8">
+      <h2 class="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-2"><i data-lucide="bar-chart-3" class="w-6 h-6"></i> Hasil Semua Peserta</h2>
+      <div class="overflow-x-auto">
+       <table class="w-full text-sm">
+        <thead class="bg-gray-100 border-b-2 border-gray-300">
+         <tr>
+          <th class="px-4 py-3 text-left font-semibold">Ranking</th>
+          <th class="px-4 py-3 text-left font-semibold">Nama</th>
+          <th class="px-4 py-3 text-left font-semibold">Sekolah</th>
+          <th class="px-4 py-3 text-left font-semibold">Kelas</th>
+          <th class="px-4 py-3 text-center font-semibold">Skor</th>
+          <th class="px-4 py-3 text-center font-semibold">Status</th>
+         </tr>
+        </thead>
+        <tbody id="results-table-body">
+         <tr>
+          <td colspan="6" class="px-4 py-8 text-center text-gray-500">Memuat data...</td>
+         </tr>
+        </tbody>
+       </table>
+      </div><button id="back-results-btn" class="mt-6 bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-lg transition duration-200"> ← Kembali </button>
+     </div>
+    </div><!-- View All Results Button -->
+    <div id="view-all-btn-container" class="text-center mb-6"><button id="view-all-results-btn" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-6 rounded-lg transition duration-200 flex items-center justify-center gap-2 mx-auto"> <i data-lucide="eye" class="w-5 h-5"></i> Lihat Hasil Semua Peserta </button>
+    </div>
+   </main>
+  </div>
+  <script>
+    // Question Bank dengan 40% mudah, 60% sulit
+    const questionBank = {
+      bilangan: {
+        mudah: [
+          { q: "Berapa hasil dari 25 + 15?", options: ["30", "35", "40", "45"], correct: 1 },
+          { q: "Jika 30% dari x adalah 15, berapa nilai x?", options: ["30", "45", "50", "60"], correct: 2 },
+          { q: "Pecahan 3/4 sama dengan berapa persen?", options: ["50%", "60%", "75%", "80%"], correct: 2 },
+          { q: "Berapa KPK dari 12 dan 18?", options: ["24", "36", "48", "72"], correct: 1 }
+        ],
+        sulit: [
+          { q: "Jika 2x + 5 = 17, berapa nilai x?", options: ["4", "6", "8", "10"], correct: 1 },
+          { q: "Perbandingan usia A:B = 3:5. Jika jumlah usia mereka 40 tahun, berapa usia A?", options: ["12", "15", "20", "25"], correct: 0 },
+          { q: "Sistem persamaan: x + y = 10 dan 2x - y = 5. Berapa nilai x?", options: ["3", "5", "7", "9"], correct: 2 },
+          { q: "Jika a + b = 20 dan a - b = 4, berapa nilai a × b?", options: ["96", "104", "112", "120"], correct: 1 },
+          { q: "Rasio 5:3 diperbesar 2 kali. Rasio baru adalah?", options: ["10:3", "5:6", "10:6", "2.5:1.5"], correct: 2 },
+          { q: "Bilangan yang habis dibagi 2, 3, dan 5 adalah?", options: ["20", "30", "40", "50"], correct: 1 }
+        ]
+      },
+      geometri: {
+        mudah: [
+          { q: "Keliling persegi dengan sisi 5 cm adalah?", options: ["10 cm", "15 cm", "20 cm", "25 cm"], correct: 2 },
+          { q: "Luas persegi panjang 12 cm × 5 cm adalah?", options: ["17 cm²", "34 cm²", "60 cm²", "120 cm²"], correct: 2 },
+          { q: "Volume kubus dengan sisi 3 cm adalah?", options: ["9 cm³", "18 cm³", "27 cm³", "36 cm³"], correct: 2 },
+          { q: "Luas lingkaran dengan jari-jari 7 cm adalah? (π = 22/7)", options: ["44 cm²", "77 cm²", "154 cm²", "308 cm²"], correct: 2 },
+          { q: "Jumlah sudut dalam segitiga adalah?", options: ["90°", "180°", "270°", "360°"], correct: 1 },
+          { q: "Berapa banyak rusuk kubus?", options: ["8", "10", "12", "14"], correct: 2 },
+          { q: "Diagonal persegi dengan sisi 4 cm adalah? (√2 ≈ 1.4)", options: ["4 cm", "5.6 cm", "8 cm", "16 cm"], correct: 1 }
+        ],
+        sulit: [
+          { q: "Segitiga siku-siku punya sisi 3, 4, dan sisi miring. Berapa panjang sisi miring?", options: ["5", "6", "7", "8"], correct: 0 },
+          { q: "Dua segitiga sebangun dengan perbandingan sisi 2:3. Jika luas segitiga kecil 12 cm², luas segitiga besar?", options: ["18 cm²", "27 cm²", "36 cm²", "48 cm²"], correct: 2 },
+          { q: "Luas trapesium dengan sisi sejajar 8 cm, 6 cm dan tinggi 4 cm adalah?", options: ["14 cm²", "24 cm²", "28 cm²", "32 cm²"], correct: 2 },
+          { q: "Tabung dengan jari-jari 5 cm dan tinggi 10 cm. Volume = πr²t. Volume tabung?", options: ["250π cm³", "500π cm³", "750π cm³", "1000π cm³"], correct: 1 },
+          { q: "Sudut pusat lingkaran 120°. Berapa sudut keliling yang menghadap busur yang sama?", options: ["30°", "60°", "90°", "120°"], correct: 1 },
+          { q: "Luas permukaan kubus dengan sisi 5 cm adalah?", options: ["50 cm²", "75 cm²", "125 cm²", "150 cm²"], correct: 3 },
+          { q: "Segitiga sama sisi dengan keliling 36 cm. Berapa tingginya? (√3 ≈ 1.73)", options: ["10.38 cm", "12 cm", "17.3 cm", "20.76 cm"], correct: 0 },
+          { q: "Dua bangun sebangun dengan skala 2:5. Perbandingan luasnya?", options: ["2:5", "4:25", "8:125", "2:10"], correct: 1 },
+          { q: "Prisma segitiga dengan alas 6 cm, tinggi segitiga 4 cm, tinggi prisma 8 cm. Volume?", options: ["48 cm³", "96 cm³", "192 cm³", "384 cm³"], correct: 1 },
+          { q: "Jari-jari lingkaran 10 cm. Busur dengan sudut pusat 45° panjangnya?", options: ["2.5π cm", "5π cm", "7.5π cm", "10π cm"], correct: 1 }
+        ]
+      },
+      data: {
+        mudah: [
+          { q: "Data: 2, 3, 5, 7. Rata-ratanya?", options: ["4.25", "4.5", "4.75", "5"], correct: 0 },
+          { q: "Data: 10, 20, 30. Median-nya?", options: ["10", "20", "25", "30"], correct: 1 }
+        ],
+        sulit: [
+          { q: "Data: 1, 2, 3, 4, 5, 6, 7, 8, 9. Median-nya?", options: ["4", "5", "6", "7"], correct: 1 },
+          { q: "Dari 100 siswa, 60% lulus Matematika. Berapa siswa yang lulus?", options: ["40", "50", "60", "70"], correct: 2 },
+          { q: "Diagram batang menunjukkan: Senin 20, Selasa 25, Rabu 30. Rata-rata pengunjung adalah?", options: ["20", "22", "24", "25"], correct: 3 }
+        ]
+      }
+    };
+
+    let currentQuestion = 0;
+    let answers = new Array(30).fill(null);
+    let currentCategory = '';
+    let allQuestions = [];
+    let userData = {};
+    let timerInterval = null;
+    let timeLeft = 7200; // 2 jam = 7200 detik
+    let allResults = [];
+
+    // SDK Initialization
+    const dataHandler = {
+      onDataChanged(data) {
+        allResults = data.sort((a, b) => b.total_score - a.total_score);
+        updateResultsTable();
+      }
+    };
+
+    (async () => {
+      const initResult = await window.dataSdk.init(dataHandler);
+      if (!initResult.isOk) console.error("Data SDK init failed");
+    })();
+
+    // Shuffle function
+    function shuffle(arr) {
+      return [...arr].sort(() => Math.random() - 0.5);
+    }
+
+    // Generate random questions
+    function generateQuestions() {
+      allQuestions = [];
+      
+      // Bilangan: 9 soal (3-4 mudah, 5-6 sulit)
+      const bilanganMudah = shuffle(questionBank.bilangan.mudah).slice(0, 3);
+      const bilanganSulit = shuffle(questionBank.bilangan.sulit).slice(0, 6);
+      allQuestions.push(...bilanganMudah.map(q => ({...q, category: 'Bilangan', difficulty: 'Mudah'})));
+      allQuestions.push(...bilanganSulit.map(q => ({...q, category: 'Bilangan', difficulty: 'Sulit'})));
+
+      // Geometri: 16 soal (6-7 mudah, 9-10 sulit)
+      const geometriMudah = shuffle(questionBank.geometri.mudah).slice(0, 6);
+      const geometriSulit = shuffle(questionBank.geometri.sulit).slice(0, 10);
+      allQuestions.push(...geometriMudah.map(q => ({...q, category: 'Geometri', difficulty: 'Mudah'})));
+      allQuestions.push(...geometriSulit.map(q => ({...q, category: 'Geometri', difficulty: 'Sulit'})));
+
+      // Data: 5 soal (2 mudah, 3 sulit)
+      const dataMudah = shuffle(questionBank.data.mudah).slice(0, 2);
+      const dataSulit = shuffle(questionBank.data.sulit).slice(0, 3);
+      allQuestions.push(...dataMudah.map(q => ({...q, category: 'Data', difficulty: 'Mudah'})));
+      allQuestions.push(...dataSulit.map(q => ({...q, category: 'Data', difficulty: 'Sulit'})));
+
+      // Shuffle all questions
+      allQuestions = shuffle(allQuestions);
+    }
+
+    // Display question
+    function displayQuestion(index) {
+      const q = allQuestions[index];
+      document.getElementById('question-text').textContent = q.q;
+      document.getElementById('category-badge').textContent = q.category;
+      document.getElementById('category-badge').className = 
+        `px-3 py-1 font-semibold text-sm rounded-full ${
+          q.category === 'Bilangan' ? 'bg-purple-100 text-purple-800' :
+          q.category === 'Geometri' ? 'bg-pink-100 text-pink-800' :
+          'bg-green-100 text-green-800'
+        }`;
+      document.getElementById('difficulty-badge').textContent = q.difficulty;
+      document.getElementById('difficulty-badge').className = 
+        `px-3 py-1 font-semibold text-sm rounded-full ${
+          q.difficulty === 'Mudah' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
+        }`;
+
+      const container = document.getElementById('options-container');
+      container.innerHTML = '';
+      q.options.forEach((opt, i) => {
+        const div = document.createElement('div');
+        div.className = `p-4 border-2 rounded-lg cursor-pointer transition ${
+          answers[index] === i ? 'border-blue-600 bg-blue-50' : 'border-gray-300 hover:border-blue-400'
+        }`;
+        div.textContent = opt;
+        div.onclick = () => selectAnswer(i);
+        container.appendChild(div);
+      });
+
+      // Update progress
+      document.getElementById('progress-text').textContent = `Soal ${index + 1} dari 30`;
+      document.getElementById('progress-bar').style.width = `${((index + 1) / 30) * 100}%`;
+    }
+
+    function selectAnswer(index) {
+      answers[currentQuestion] = index;
+      displayQuestion(currentQuestion);
+    }
+
+    function startTest() {
+      userData = {
+        nama: document.getElementById('nama').value,
+        sekolah: document.getElementById('sekolah').value,
+        kelas: document.getElementById('kelas').value,
+        absen: document.getElementById('absen').value
+      };
+
+      if (!userData.nama || !userData.sekolah || !userData.kelas || !userData.absen) {
+        alert('Harap isi semua data peserta!');
+        return;
+      }
+
+      generateQuestions();
+      currentQuestion = 0;
+      timeLeft = 7200;
+
+      document.getElementById('form-screen').classList.add('hidden');
+      document.getElementById('test-screen').classList.remove('hidden');
+      document.getElementById('view-all-btn-container').classList.add('hidden');
+
+      displayQuestion(0);
+      startTimer();
+    }
+
+    function startTimer() {
+      timerInterval = setInterval(() => {
+        timeLeft--;
+        const hours = Math.floor(timeLeft / 3600);
+        const minutes = Math.floor((timeLeft % 3600) / 60);
+        const seconds = timeLeft % 60;
+        document.getElementById('timer').textContent = 
+          `⏱ ${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+
+        if (timeLeft === 0) {
+          clearInterval(timerInterval);
+          finishTest();
+        }
+      }, 1000);
+    }
+
+    function finishTest() {
+      clearInterval(timerInterval);
+      
+      let totalScore = 0;
+      let categoryScores = { Bilangan: 0, Geometri: 0, Data: 0 };
+      let categoryCounts = { Bilangan: 0, Geometri: 0, Data: 0 };
+
+      allQuestions.forEach((q, i) => {
+        if (answers[i] === q.correct) {
+          totalScore++;
+          categoryScores[q.category]++;
+        }
+        categoryCounts[q.category]++;
+      });
+
+      const result = {
+        timestamp: new Date().toISOString(),
+        nama: userData.nama,
+        sekolah: userData.sekolah,
+        kelas: userData.kelas,
+        absen: userData.absen,
+        total_score: totalScore,
+        bilangan_score: Math.round((categoryScores.Bilangan / categoryCounts.Bilangan) * 100),
+        geometri_score: Math.round((categoryScores.Geometri / categoryCounts.Geometri) * 100),
+        data_score: Math.round((categoryScores.Data / categoryCounts.Data) * 100),
+        persen: Math.round((totalScore / 30) * 100),
+        status: totalScore >= 20 ? 'Lulus' : 'Tidak Lulus',
+        waktu_selesai: `${Math.floor((7200 - timeLeft) / 60)} menit`
+      };
+
+      (async () => {
+        const saveResult = await window.dataSdk.create(result);
+        if (!saveResult.isOk) console.error("Failed to save result");
+      })();
+
+      document.getElementById('test-screen').classList.add('hidden');
+      document.getElementById('results-screen').classList.remove('hidden');
+      document.getElementById('results-name').textContent = `Terima kasih ${userData.nama}!`;
+      document.getElementById('total-score').textContent = totalScore;
+      document.getElementById('bilangan-score').textContent = `${result.bilangan_score}%`;
+      document.getElementById('geometri-score').textContent = `${result.geometri_score}%`;
+      document.getElementById('data-score').textContent = `${result.data_score}%`;
+    }
+
+    function updateResultsTable() {
+      const tbody = document.getElementById('results-table-body');
+      tbody.innerHTML = allResults.map((r, i) => `
+        <tr class="border-b hover:bg-gray-50">
+          <td class="px-4 py-3 font-semibold">${i + 1}</td>
+          <td class="px-4 py-3">${r.nama}</td>
+          <td class="px-4 py-3">${r.sekolah}</td>
+          <td class="px-4 py-3">${r.kelas}</td>
+          <td class="px-4 py-3 text-center font-bold text-blue-600">${r.total_score}/30</td>
+          <td class="px-4 py-3 text-center">
+            <span class="px-3 py-1 rounded-full text-sm font-semibold ${
+              r.status === 'Lulus' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
+            }">${r.status}</span>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    // Event Listeners
+    document.getElementById('start-btn').onclick = startTest;
+
+    document.getElementById('prev-btn').onclick = () => {
+      if (currentQuestion > 0) {
+        currentQuestion--;
+        displayQuestion(currentQuestion);
+      }
+    };
+
+    document.getElementById('next-btn').onclick = () => {
+      if (currentQuestion < 29) {
+        currentQuestion++;
+        displayQuestion(currentQuestion);
+      }
+    };
+
+    document.getElementById('finish-btn').onclick = finishTest;
+
+    document.getElementById('restart-btn').onclick = () => {
+      document.getElementById('results-screen').classList.add('hidden');
+      document.getElementById('form-screen').classList.remove('hidden');
+      document.getElementById('view-all-btn-container').classList.remove('hidden');
+      document.getElementById('nama').value = '';
+      document.getElementById('sekolah').value = '';
+      document.getElementById('kelas').value = '';
+      document.getElementById('absen').value = '';
+      answers = new Array(30).fill(null);
+    };
+
+    document.getElementById('view-all-results-btn').onclick = () => {
+      document.getElementById('form-screen').classList.add('hidden');
+      document.getElementById('view-all-btn-container').classList.add('hidden');
+      document.getElementById('all-results-screen').classList.remove('hidden');
+    };
+
+    document.getElementById('back-results-btn').onclick = () => {
+      document.getElementById('all-results-screen').classList.add('hidden');
+      document.getElementById('form-screen').classList.remove('hidden');
+      document.getElementById('view-all-btn-container').classList.remove('hidden');
+    };
+
+    // Initialize lucide icons
+    setTimeout(() => lucide.createIcons(), 100);
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9ecbc0e7b4dd0fad',t:'MTc3NjI2NDUzMS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>

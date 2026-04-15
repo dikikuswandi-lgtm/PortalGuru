@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Daftar Siswa - Web Site Kelas 6</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      background: #f5f7fa;
+      color: #333;
+    }
+
+    /* HEADER */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 50px;
+      background: white;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    }
+
+    header h1 {
+      color: #4f46e5;
+    }
+
+    nav a {
+      margin-left: 20px;
+      text-decoration: none;
+      color: #333;
+      font-weight: 500;
+    }
+
+    nav a:hover {
+      color: #4f46e5;
+    }
+
+    /* JUDUL HALAMAN */
+    .title-section {
+      text-align: center;
+      padding: 50px 20px 20px;
+    }
+
+    .title-section h2 {
+      font-size: 32px;
+      color: #1f2937;
+    }
+
+    .title-section p {
+      color: #6b7280;
+      margin-top: 10px;
+    }
+
+    /* GRID DAFTAR SISWA */
+    .siswa-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 25px;
+      padding: 40px 50px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .siswa-card {
+      background: white;
+      padding: 30px 20px;
+      border-radius: 20px;
+      text-align: center;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+      transition: 0.4s;
+      border: 1px solid #eee;
+      opacity: 0; /* Untuk animasi */
+      transform: translateY(30px); /* Untuk animasi */
+    }
+
+    .siswa-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 15px 30px rgba(79, 70, 229, 0.15);
+      border-color: #4f46e5;
+    }
+
+    .avatar-img {
+  /* Tentukan ukuran tetap agar tidak meluap */
+  width: 100px; 
+  height: 100px;
+  
+  /* Membuat gambar tetap proporsional meskipun dipaksa masuk ke ukuran di atas */
+  object-fit: cover; 
+  
+  /* Membuat gambar bulat */
+  border-radius: 100%; 
+  
+  /* Tambahan hiasan */
+  border: 3px solid #4f46e5;
+  padding: 4px;
+  background: white;
+  margin-bottom: 15px;
+}
+    }
+
+    .siswa-card h4 {
+      font-size: 1.2rem;
+      color: #111827;
+      margin-bottom: 5px;
+    }
+
+    .siswa-card p {
+      color: #6b7280;
+      font-size: 0.9rem;
+      font-weight: 300;
+    }
+
+    /* ANIMASI SHOW */
+    .show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      background: #4f46e5;
+      color: white;
+      margin-top: 50px;
+    }
+
+    @media(max-width: 768px) {
+      header { padding: 20px; }
+      .siswa-grid { padding: 20px; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Web Site Kelas 6</h1>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="siswa.html" style="color: #4f46e5;">Siswa</a>
+    <a href="materi.html">Materi</a>
+  </nav>
+</header>
+
+<section class="title-section">
+  <h2>Daftar Teman Sekelas</h2>
+  <p>Kenali lebih dekat teman-teman hebat di Kelas 6</p>
+</section>
+
+<section class="siswa-grid">
+  <div class="siswa-card">
+    <img src="siswa1.jpg" alt="Siswa 1" class="avatar-img">
+    <h4>Budi Santoso</h4>
+    <p>Ketua Kelas</p>
+  </div>
+
+  <div class="siswa-card">
+    <img src="siswa2.jpg" alt="Siswa 2" class="avatar-img">
+    <h4>Siti Fatimah</h4>
+    <p>Bendahara</p>
+  </div>
+
+  <div class="siswa-card">
+    <img src="siswa3.jpg" alt="Siswa 3" class="avatar-img">
+    <h4>Dedi Cahyadi</h4>
+    <p>Siswa</p>
+  </div>
+
+  <div class="siswa-card">
+    <img src="siswa4.jpg" alt="Siswa 4" class="avatar-img">
+    <h4>Lani Wijaya</h4>
+    <p>Siswa</p>
+  </div>
+
+  <div class="siswa-card">
+    <img src="siswa5.jpg" alt="Siswa 5" class="avatar-img">
+    <h4>Ahmad Fauzi</h4>
+    <p>Siswa</p>
+  </div>
+
+  <div class="siswa-card">
+    <img src="siswa6.jpg" alt="Siswa 6" class="avatar-img">
+    <h4>Rina Permata</h4>
+    <p>Siswa</p>
+  </div>
+
+  <div class="siswa-card">
+    <img src="siswa7.jpg" alt="Siswa 7" class="avatar-img">
+    <h4>Eko Prasetyo</h4>
+    <p>Siswa</p>
+  </div>
+
+  <div class="siswa-card">
+    <img src="siswa8.jpg" alt="Siswa 8" class="avatar-img">
+    <h4>Maya Sari</h4>
+    <p>Siswa</p>
+  </div>
+
+  <div class="siswa-card">
+    <img src="siswa9.jpg" alt="Siswa 9" class="avatar-img">
+    <h4>Hadi Wijaya</h4>
+    <p>Siswa</p>
+  </div>
+
+  <div class="siswa-card">
+    <img src="siswa10.jpg" alt="Siswa 10" class="avatar-img">
+    <h4>Gita Gutawa</h4>
+    <p>Siswa</p>
+  </div>
+
+</section>
+
+<footer>
+  <p>© 2026 Web Site Kelas 6. All rights reserved.</p>
+</footer>
+
+<script>
+  // SCROLL ANIMATION (Sama dengan index.html agar konsisten)
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('show');
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.siswa-card').forEach(el => {
+    observer.observe(el);
+  });
+</script>
+
+</body>
+</html>
