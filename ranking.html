@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ranking Siswa - Simulasi TKA</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen">
+
+  <div class="max-w-6xl mx-auto p-6">
+    <h1 class="text-3xl font-bold text-center mb-6">🏆 Ranking Siswa</h1>
+
+    <div class="bg-white rounded-xl shadow-lg p-6">
+      <div class="overflow-x-auto">
+        <table class="w-full text-sm">
+          <thead class="bg-gray-100">
+            <tr>
+              <th class="p-3 text-left">Ranking</th>
+              <th class="p-3 text-left">Nama</th>
+              <th class="p-3 text-left">Sekolah</th>
+              <th class="p-3 text-left">Kelas</th>
+              <th class="p-3 text-center">Skor</th>
+              <th class="p-3 text-center">Status</th>
+            </tr>
+          </thead>
+          <tbody id="ranking-body">
+            <tr>
+              <td colspan="6" class="text-center p-6">Memuat data...</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+<script>
+const SHEET_URL = "https://docs.google.com/spreadsheets/d/1KMQfTksAOVKDNRo0m0x__3KExZn92ECrcsAJKUJ4vr0/export?format=csv";
+
+async function loadRanking() {
+  try {
+    const res = await fetch(SHEET_URL);
+    const text = await res.text();
+
+    const rows = text.split("\n").map(r => r.split(","));
+    const headers = rows[0];
+
+    const data = rows.slice(1).map(row => {
+      let obj = {};
+      headers.forEach((h, i) => {
+        obj[h.trim()] = row[i];
+      });
+      return obj;
+    });
+
+    data.forEach(d => d.total_score = Number(d.total_score));
+
+    // sort ranking
+    data.sort((a, b) => b.total_score - a.total_score);
+
+    renderTable(data);
+
+  } catch (err) {
+    console.error(err);
+  }
+}
+
+function renderTable(data) {
+  const tbody = document.getElementById("ranking-body");
+
+  tbody.innerHTML = data.map((r, i) => {
+
+    let medal = "";
+    if (i === 0) medal = "🥇";
+    else if (i === 1) medal = "🥈";
+    else if (i === 2) medal = "🥉";
+
+    return `
+      <tr class="border-b hover:bg-gray-50">
+        <td class="p-3 font-bold">${medal} ${i + 1}</td>
+        <td class="p-3">${r.nama}</td>
+        <td class="p-3">${r.sekolah}</td>
+        <td class="p-3">${r.kelas}</td>
+        <td class="p-3 text-center font-bold text-blue-600">${r.total_score}</td>
+        <td class="p-3 text-center">
+          <span class="px-3 py-1 rounded-full text-sm font-semibold ${
+            r.status === 'Lulus'
+              ? 'bg-green-100 text-green-800'
+              : 'bg-red-100 text-red-800'
+          }">
+            ${r.status}
+          </span>
+        </td>
+      </tr>
+    `;
+  }).join("");
+}
+
+loadRanking();
+</script>
+
+</body>
+</html>
